@@ -6,6 +6,9 @@
 
 [build.environment]
   NODE_VERSION = "22"
+  # The office email addresses are shown on the site itself (footer, contact page), so they are
+  # not secrets. The Resend API key is still scanned.
+  SECRETS_SCAN_OMIT_KEYS = "PALMSURE_CONTACT_EMAIL,PALMSURE_ADMIN_EMAIL"
 
 # Any URL without its own prerendered page loads the app, which handles the route.
 [[redirects]]
