@@ -1,0 +1,14 @@
+# Netlify hosting. Every page is prerendered, so the site is built as static files;
+# the contact/quote form posts to the function in netlify/functions/send-email.mjs.
+[build]
+  command = "npx ng build --output-mode=static"
+  publish = "dist/palmsure-corp-v2/browser"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Any URL without its own prerendered page loads the app, which handles the route.
+[[redirects]]
+  from = "/*"
+  to = "/index.csr.html"
+  status = 200
