@@ -57,7 +57,8 @@ export class Quote implements OnInit {
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required, Validators.pattern('^[0-9-+\\s()]*$')]]
+      phone: ['', [Validators.required, Validators.pattern('^[0-9-+\\s()]*$')]],
+      website: [''] // hidden spam trap (honeypot)
     });
 
     this.propertyDetailsForm = this.fb.group({
@@ -124,10 +125,13 @@ export class Quote implements OnInit {
     // --- SEND EMAIL LOGIC ---
     this.isSubmitting = true;
 
+    const { website, ...personalDetails } = this.personalDetailsForm.value;
+
     this.emailService.sendQuoteRequest(
       this.selectedInsuranceType!,
-      this.personalDetailsForm.value,
-      specifics.value
+      personalDetails,
+      specifics.value,
+      website
     ).subscribe({
       next: () => {
         // Success! Move to Step 4 (Thank You Screen)

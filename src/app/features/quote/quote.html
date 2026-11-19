@@ -67,6 +67,12 @@
                 <input type="tel" id="phone" formControlName="phone" [class.is-invalid]="p['phone'].invalid && p['phone'].touched">
                 <div *ngIf="p['phone'].invalid && p['phone'].touched" class="validation-message">Phone number required.</div>
               </div>
+
+              <!-- Spam trap: hidden from people and screen readers; bots fill it in. -->
+              <div class="hp-field" aria-hidden="true">
+                <label for="quoteWebsite">Leave this field empty</label>
+                <input type="text" id="quoteWebsite" formControlName="website" tabindex="-1" autocomplete="off">
+              </div>
             </div>
           </form>
         </div>
