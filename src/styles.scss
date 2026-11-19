@@ -205,3 +205,14 @@ a {
   white-space: nowrap;
   border: 0;
 }
+
+// Spam trap ("honeypot"): a form field that people never see but bots fill in.
+// Moved off-screen rather than display:none, because some bots skip hidden inputs.
+.hp-field {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}

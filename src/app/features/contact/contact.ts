@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { Title, Meta } from '@angular/platform-browser';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { EmailService } from '../../core/services/email.service';
 
 @Component({
   selector: 'app-contact',
@@ -18,6 +19,7 @@ export class Contact implements OnInit, AfterViewInit {
   private titleService = inject(Title);
   private metaService = inject(Meta);
   private fb = inject(FormBuilder);
+  private emailService = inject(EmailService);
 
   contactForm!: FormGroup;
   isSubmitting = false;
@@ -31,7 +33,8 @@ export class Contact implements OnInit, AfterViewInit {
       fullName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       contactNumber: ['', Validators.required],
-      message: ['', Validators.required]
+      message: ['', Validators.required],
+      website: [''] // hidden spam trap (honeypot)
     });
   }
 
@@ -52,12 +55,18 @@ export class Contact implements OnInit, AfterViewInit {
     if (this.contactForm.invalid) return;
 
     this.isSubmitting = true;
-    // Simulate API call
-    setTimeout(() => {
-      this.isSubmitting = false;
-      this.contactForm.reset();
-      alert('Thank you for reaching out! We will get back to you shortly.');
-    }, 1500);
+    this.emailService.sendContactForm(this.contactForm.value).subscribe({
+      next: () => {
+        this.isSubmitting = false;
+        this.contactForm.reset();
+        alert('Thank you for reaching out! We will get back to you shortly.');
+      },
+      error: (err) => {
+        console.error('Email failed:', err);
+        this.isSubmitting = false;
+        alert('Connection error. Please call 021 699 8370.');
+      }
+    });
   }
 
   private initGSAPAnimations(): void {
